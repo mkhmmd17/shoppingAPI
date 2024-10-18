@@ -17,7 +17,6 @@ public class ShoppingApplication {
         SpringApplication.run(ShoppingApplication.class, args);
     }
 
-
     @Bean
     public CommandLineRunner initalizeDatabase(ProductRepository productRepository) {
         return args -> {
