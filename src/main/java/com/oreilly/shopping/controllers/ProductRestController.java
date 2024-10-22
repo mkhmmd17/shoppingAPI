@@ -1,6 +1,7 @@
 package com.oreilly.shopping.controllers;
 
 import com.oreilly.shopping.entities.Product;
+import com.oreilly.shopping.exceptions.ProductMinimumPriceException;
 import com.oreilly.shopping.services.ProductService;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,14 @@ public class ProductRestController {
                     return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
+
+
+    @GetMapping(params = "min")
+    public List<Product> getProductByMinPrice(@RequestParam(defaultValue = "0.0") double min) {
+        if (min < 0) throw new ProductMinimumPriceException(min);
+        return productService.findAllProductsByMinPrice(min);
+    }
+
 
     @DeleteMapping()
     public ResponseEntity<?> deleteAllProducts() {

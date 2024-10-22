@@ -85,6 +85,24 @@ class ProductRestControllerTest {
     }
 
     @Test
+    void productWithValidMinPrice() {
+        webClient.get()
+                .uri("/products?min=5.00")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Product.class).hasSize(2)
+                .consumeWith(System.out::println);
+    }
+
+    @Test
+    void productWithInvalidMinPrice() {
+        webClient.get()
+                .uri("/products?min=-1.00")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void insertProduct() {
         List<Long> productIds = getIds();
         assertThat(productIds).doesNotContain(999L);
